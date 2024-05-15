@@ -1,6 +1,6 @@
-package com.epsi.epsistore.services;
+package com.brisage.authentication.services;
 
-import com.epsi.core.entities.Role;
+import com.brisage.authentication.entity.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

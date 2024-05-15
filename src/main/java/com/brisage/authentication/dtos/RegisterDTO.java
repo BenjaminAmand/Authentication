@@ -1,4 +1,4 @@
-package com.epsi.epsistore.dtos;
+package com.brisage.authentication.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -11,8 +11,10 @@ import lombok.*;
 @Getter
 public class RegisterDTO {
 
-    @JsonProperty(value = "email")
+    @JsonProperty(value = "username")
     private String username;
+    @JsonProperty(value = "email")
+    private String email;
     @JsonProperty(value = "pwd")
     private String password;
 

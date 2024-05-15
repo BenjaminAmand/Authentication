@@ -1,15 +1,12 @@
-package com.epsi.epsistore.filters;
+package com.brisage.authentication.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.LogRecord;
 
 public class CORSFilter implements Filter {
     private final List<String> allowedOrigins = Arrays.asList("http://127.0.0.1:4200");

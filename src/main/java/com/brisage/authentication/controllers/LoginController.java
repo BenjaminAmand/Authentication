@@ -1,12 +1,10 @@
-package com.epsi.epsistore.controllers;
+package com.brisage.authentication.controllers;
 
-import com.epsi.core.entities.User;
-import com.epsi.epsistore.dtos.LoginDTO;
-import com.epsi.epsistore.dtos.RegisterDTO;
-import com.epsi.epsistore.dtos.ResponseBodyDTO;
-import com.epsi.epsistore.dtos.TEST;
-import com.epsi.epsistore.services.UserService;
-import jakarta.servlet.http.Cookie;
+import com.brisage.authentication.dtos.LoginDTO;
+import com.brisage.authentication.dtos.RegisterDTO;
+import com.brisage.authentication.dtos.ResponseBodyDTO;
+import com.brisage.authentication.entity.User;
+import com.brisage.authentication.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -23,45 +21,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = "https://127.0.0.1:4200", allowCredentials = "true")
 @RequiredArgsConstructor
 public class LoginController {
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
     @Autowired
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
     private final UserService userService;
-
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
-
-    private SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
-
-    /// Informations diverses sur la connection :
-    /// Le code dans le try du login authentifie l'utilisateur et sauvegarde le context dans le securityContextRepository
-    /// Pour recuperer les informations sur l'utilisateur connecté depuis sa requete faire :
-    /// DeferredSecurityContext context = securityContextRepository.loadDeferredContext(request);
-    /// le DeferredSecurityContext obtenu est un objet permettant de recuperer le context de la requete
-    /// Si context.isGenerated() est vrai alors le context viens d'etre genere et ne contient pas d'authentification.
-    /// Sinon, il contient l'authentification de l'utilisateur
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
     @PostMapping("/login")
     public ResponseEntity<ResponseBodyDTO> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response){
         try{
-            System.out.println(loginDTO.getUsername() + "|" + loginDTO.getPassword());
-            System.out.println(userDetailsService.loadUserByUsername(loginDTO.getUsername()).getPassword());
-            System.out.println(loginDTO.getUsername() + "|" + loginDTO.getPassword());
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginDTO.getUsername(),
@@ -91,55 +72,40 @@ public class LoginController {
         return "ok";
     }
 
-    @GetMapping("/test")
-    public String test(HttpServletRequest request){
-        HttpSession session = request.getSession(true);
-        Authentication authentication = securityContextHolderStrategy.getContext().getAuthentication();
-        DeferredSecurityContext context = securityContextRepository.loadDeferredContext(request);
-        if(context.isGenerated()){
-            System.out.println("gene");
-            System.out.println(context.get().getAuthentication());
-        }
-        else {
-            System.out.println("No gene");
-            System.out.println(context.get().getAuthentication());
-        }
-        if(authentication != null){
-            System.out.println(authentication.getName());
-        }
-        if(session != null){
-            return session.getId();
-        }
-        else{
-            return "ok";
-        }
-    }
-
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO registerDto) {
         try {
             String response = userService.register(registerDto);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new ResponseBodyDTO(response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur est survenue lors de l'inscription de l'utilisateur." + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseBodyDTO("Une erreur est survenue lors de l'inscription de l'utilisateur." + e.getMessage()));
         }
     }
 
-    @GetMapping("/get_cookie")
-    public String getCookie(HttpServletRequest request){
-        DeferredSecurityContext context = securityContextRepository.loadDeferredContext(request);
-        if(context.isGenerated()){
-            return "gene";
+    @GetMapping("/anon")
+    public boolean anonSession(HttpServletResponse response, HttpServletRequest request){
+        HttpSession session = request.getSession(true);
+        if(session.isNew()){
+            return true;
         }
         else{
-            return "nongene";
+            return false;
         }
     }
 
-    @GetMapping("/set_cookie")
-    public String setCookie(@RequestParam("cookie") String id, @RequestParam("redirect_uri") String uri, HttpServletResponse response) throws IOException {
-        response.addHeader("Set-Cookie", "JSESSIONID="+id+"; Path=/; HttpOnly; SameSite=None");
-        response.sendRedirect(uri);
-        return id;
+    @PostMapping("/correct-credentials")
+    public boolean CorrectCredentials(@RequestBody LoginDTO login){
+        try {
+            User user = userService.findByEmail(login.getUsername());
+            return passwordEncoder.matches(login.getPassword(), user.getPassword());
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    @PostMapping("/encode-password")
+    public String EncodePassword(@RequestBody String password){
+        return passwordEncoder.encode(password);
     }
 }

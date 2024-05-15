@@ -1,4 +1,4 @@
-package com.epsi.epsistore.dtos;
+package com.brisage.authentication.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

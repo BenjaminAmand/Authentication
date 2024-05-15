@@ -1,7 +1,6 @@
-package com.epsi.epsistore.entity;
+package com.brisage.authentication.entity;
 
-import com.epsi.core.entities.User;
-import com.epsi.epsistore.services.UserDetailsServiceImp;
+import com.brisage.authentication.services.UserDetailsServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +29,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPwd();
+        return user.getPassword();
     }
 
     @Override

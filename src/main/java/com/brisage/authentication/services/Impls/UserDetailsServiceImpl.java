@@ -1,15 +1,14 @@
-package com.epsi.epsistore.services.Impls;
+package com.brisage.authentication.services.Impls;
 
-import com.epsi.core.entities.Role;
-import com.epsi.epsistore.entity.UserDetailsImpl;
-import com.epsi.epsistore.services.RoleService;
-import com.epsi.epsistore.services.UserDetailsServiceImp;
-import com.epsi.epsistore.services.UserService;
+import com.brisage.authentication.entity.Role;
+import com.brisage.authentication.entity.UserDetailsImpl;
+import com.brisage.authentication.services.RoleService;
+import com.brisage.authentication.services.UserDetailsServiceImp;
+import com.brisage.authentication.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsServiceImp {
         List<Role> roles = roleService.getRolesLessThan(role);
         List<GrantedAuthority> auth = new ArrayList<>();
         for(Role elt : roles){
-            auth.add(new SimpleGrantedAuthority(elt.getRoleName()));
+            auth.add(new SimpleGrantedAuthority(elt.getNomRole()));
         }
         return auth;
     }

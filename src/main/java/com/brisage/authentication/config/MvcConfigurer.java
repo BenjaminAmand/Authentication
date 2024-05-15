@@ -1,4 +1,4 @@
-package com.epsi.epsistore.config;
+package com.brisage.authentication.config;
 
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.apache.tomcat.util.http.SameSiteCookies;

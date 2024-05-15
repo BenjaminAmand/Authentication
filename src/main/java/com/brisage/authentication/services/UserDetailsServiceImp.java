@@ -1,6 +1,6 @@
-package com.epsi.epsistore.services;
+package com.brisage.authentication.services;
 
-import com.epsi.core.entities.Role;
+import com.brisage.authentication.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

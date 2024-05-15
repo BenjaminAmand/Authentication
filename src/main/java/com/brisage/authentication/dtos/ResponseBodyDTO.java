@@ -1,4 +1,4 @@
-package com.epsi.epsistore.dtos;
+package com.brisage.authentication.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TEST {
-    private String body;
+public class ResponseBodyDTO {
+    public String body;
 }

@@ -1,12 +1,12 @@
-package com.epsi.epsistore.services.Impls;
+package com.brisage.authentication.services.Impls;
 
 
-import com.epsi.core.entities.Role;
-import com.epsi.core.entities.User;
-import com.epsi.core.repositories.RoleRepository;
-import com.epsi.core.repositories.UserRepository;
-import com.epsi.epsistore.dtos.RegisterDTO;
-import com.epsi.epsistore.services.UserService;
+import com.brisage.authentication.dtos.RegisterDTO;
+import com.brisage.authentication.entity.Role;
+import com.brisage.authentication.entity.User;
+import com.brisage.authentication.repository.RoleRepository;
+import com.brisage.authentication.repository.UserRepository;
+import com.brisage.authentication.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,21 +31,17 @@ public class UserServiceImpl implements UserService {
         String roleName = "ROLE_USER";
 
         // define the role
-        Role role = roleRepository.findByRoleName(roleName)
+        Role role = roleRepository.findByNomRole(roleName)
                 .orElseGet(() -> {
                     Role newRole = new Role();
-                    newRole.setRoleName(roleName);
+                    newRole.setNomRole(roleName);
                     return roleRepository.save(newRole);
                 });
 
         // create a BCryptPasswordEncoder object to encode passwords
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // creation of the user with his information
-        var user = User.builder()
-                .email(registerDto.getUsername())
-                .pwd(passwordEncoder.encode(registerDto.getPassword()))
-                .role(role)
-                .build();
+        User user = new User(registerDto.getUsername(), registerDto.getEmail(), passwordEncoder.encode(registerDto.getPassword()), role);
         userRepository.save(user);
         return "ok";
     }

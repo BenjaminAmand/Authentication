@@ -1,8 +1,8 @@
-package com.epsi.epsistore.services.Impls;
+package com.brisage.authentication.services.Impls;
 
-import com.epsi.core.entities.Role;
-import com.epsi.core.repositories.RoleRepository;
-import com.epsi.epsistore.services.RoleService;
+import com.brisage.authentication.entity.Role;
+import com.brisage.authentication.repository.RoleRepository;
+import com.brisage.authentication.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class RoleServiceImpl implements RoleService {
         List<Role> roles = repository.findAll();
         List<Role> res = new ArrayList<>();
         for(Role elt : roles){
-            if(elt.getPriorityIndex() < role.getPriorityIndex())
+            if(elt.getPriority() < role.getPriority())
                 res.add(elt);
         }
         res.add(role);
