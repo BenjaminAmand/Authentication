@@ -82,17 +82,6 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/anon")
-    public boolean anonSession(HttpServletResponse response, HttpServletRequest request){
-        HttpSession session = request.getSession(true);
-        if(session.isNew()){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
     @PostMapping("/correct-credentials")
     public boolean CorrectCredentials(@RequestBody LoginDTO login){
         try {

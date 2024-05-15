@@ -1,5 +1,6 @@
 package com.brisage.authentication.config;
 
+import com.brisage.authentication.entity.UserDetailsImpl;
 import com.brisage.authentication.filters.CORSFilter;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -140,10 +141,12 @@ public class AuthorizationServerConfiguration {
         return context -> {
             if (context.getTokenType() == OAuth2TokenType.ACCESS_TOKEN) {
                 Authentication principal = context.getPrincipal();
+                UserDetailsImpl userDetails = (UserDetailsImpl) principal.getPrincipal();
                 Set<String> authorities = principal.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toSet());
                 context.getClaims().claim("roles", authorities);
+                context.getClaims().claim("userId", userDetails.getUser().getIdUser());
             }
         };
     }

@@ -13,6 +13,10 @@ import lombok.Setter;
 @Entity(name="users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
+    private Integer idUser;
+
     @Column(name="username")
     private String username;
 

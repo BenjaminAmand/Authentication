@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         // create a BCryptPasswordEncoder object to encode passwords
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // creation of the user with his information
-        User user = new User(registerDto.getUsername(), registerDto.getEmail(), passwordEncoder.encode(registerDto.getPassword()), role);
+        User user = new User(null, registerDto.getUsername(), registerDto.getEmail(), passwordEncoder.encode(registerDto.getPassword()), role);
         userRepository.save(user);
         return "ok";
     }
