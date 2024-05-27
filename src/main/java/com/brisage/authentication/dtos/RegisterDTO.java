@@ -1,6 +1,7 @@
 package com.brisage.authentication.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
 import lombok.*;
 
 

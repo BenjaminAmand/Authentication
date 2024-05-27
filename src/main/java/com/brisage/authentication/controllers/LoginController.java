@@ -1,5 +1,4 @@
 package com.brisage.authentication.controllers;
-
 import com.brisage.authentication.dtos.LoginDTO;
 import com.brisage.authentication.dtos.RegisterDTO;
 import com.brisage.authentication.dtos.ResponseBodyDTO;
@@ -43,6 +42,8 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<ResponseBodyDTO> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response){
         try{
+            // authenticationManager.authenticate(any())
+            // return / throw
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginDTO.getUsername(),
@@ -55,6 +56,8 @@ public class LoginController {
         catch (Exception e){
             return ResponseEntity.status(401).body(new ResponseBodyDTO(e.getMessage()));
         }
+        // userDetailsService.loadUserByUsername(any())
+        // UserDetails / null
         final UserDetails user = userDetailsService.loadUserByUsername(loginDTO.getUsername());
 
         if(user != null){
@@ -74,23 +77,14 @@ public class LoginController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO registerDto) {
-        try {
-            String response = userService.register(registerDto);
-            return ResponseEntity.ok(new ResponseBodyDTO(response));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseBodyDTO("Une erreur est survenue lors de l'inscription de l'utilisateur." + e.getMessage()));
-        }
+        String response = userService.register(registerDto);
+        return ResponseEntity.ok(new ResponseBodyDTO(response));
     }
 
     @PostMapping("/correct-credentials")
     public boolean CorrectCredentials(@RequestBody LoginDTO login){
-        try {
-            User user = userService.findByEmail(login.getUsername());
-            return passwordEncoder.matches(login.getPassword(), user.getPassword());
-        }
-        catch (Exception e){
-            return false;
-        }
+        User user = userService.findByEmail(login.getUsername());
+        return passwordEncoder.matches(login.getPassword(), user.getPassword());
     }
 
     @PostMapping("/encode-password")

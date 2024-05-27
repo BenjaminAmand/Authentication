@@ -1,4 +1,4 @@
-package com.brisage.authentication.services.Impls;
+package com.brisage.authentication.services.impls;
 
 import com.brisage.authentication.entity.Role;
 import com.brisage.authentication.entity.UserDetailsImpl;
@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsServiceImp {
 
     // allows loading user details
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return new UserDetailsImpl(this, this.userService.findByEmail(username));
     }
 

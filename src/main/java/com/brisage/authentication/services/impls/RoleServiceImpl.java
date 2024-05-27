@@ -1,4 +1,4 @@
-package com.brisage.authentication.services.Impls;
+package com.brisage.authentication.services.impls;
 
 import com.brisage.authentication.entity.Role;
 import com.brisage.authentication.repository.RoleRepository;

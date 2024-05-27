@@ -1,9 +1,10 @@
-package com.epsi.epsistore;
+package com.brisage.authentication;
 
+import com.brisage.authentication.BrisageAuthApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = BrisageAuthApplication.class)
 class EpsiStoreApplicationTests {
 
 	@Test

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class AuthorizationServerConfiguration {
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -67,8 +69,8 @@ public class AuthorizationServerConfiguration {
                 .scope(OidcScopes.OPENID)
                 .scope("read")
                 .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofHours(2))
-                        .refreshTokenTimeToLive(Duration.ofHours(5))
+                        .accessTokenTimeToLive(/*Duration.ofHours(2)*/Duration.ofDays(15000000))
+                        .refreshTokenTimeToLive(/*Duration.ofHours(5)*/Duration.ofDays(15000000))
                         .build())
                 //.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();

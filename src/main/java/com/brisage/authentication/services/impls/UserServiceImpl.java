@@ -1,4 +1,4 @@
-package com.brisage.authentication.services.Impls;
+package com.brisage.authentication.services.impls;
 
 
 import com.brisage.authentication.dtos.RegisterDTO;
@@ -22,8 +22,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User findByEmail(String username) {
-        return this.userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user was found"));
+    public User findByEmail(String username) throws UsernameNotFoundException {
+        return this.userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("No user was found"));
     }
 
     @Override
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
                 .orElseGet(() -> {
                     Role newRole = new Role();
                     newRole.setNomRole(roleName);
+                    newRole.setPriority(0);
                     return roleRepository.save(newRole);
                 });
 
