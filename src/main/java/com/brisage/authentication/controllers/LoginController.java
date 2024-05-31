@@ -61,7 +61,7 @@ public class LoginController {
         final UserDetails user = userDetailsService.loadUserByUsername(loginDTO.getUsername());
 
         if(user != null){
-            return ResponseEntity.ok(new ResponseBodyDTO(user.getUsername()+this.passwordEncoder.encode(user.getPassword())+user.getAuthorities()));
+            return ResponseEntity.ok(new ResponseBodyDTO(user.getUsername()+user.getAuthorities()));
         }
         return ResponseEntity.status(401).body(new ResponseBodyDTO("Error occured"));
     }
